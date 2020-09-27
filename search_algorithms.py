@@ -35,7 +35,6 @@ class GoalSearchAgent():
         # Subclasses will override and implement.
         if !state.depth>cutoff or !state.path_cost>cutoff:
             self.frontier.append(state)
-        raise NotImplementedError
 
     def dequeue(self) -> StateNode:
         """ Choose, remove, and return a state from the frontier """

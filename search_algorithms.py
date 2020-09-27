@@ -1,5 +1,5 @@
 # Lab 1, Part 2a: Heuristics.
-# Name(s): 
+# Name(s):
 
 from __future__ import annotations
 from typing import List, Collection, Tuple, Callable, Optional, Union, Set, Dict, Type, Iterable
@@ -17,13 +17,13 @@ class GoalSearchAgent():
     Abstract class for Goal Search Agents.
     """
     frontier : Collection[StateNode] # All Collections are "truthy" - they are True if not empty, False if empty
-    total_extends : int 
+    total_extends : int
     total_enqueues : int
 
     """ __init__, enqueue, and dequeue be overridden by STRATEGY partial subclasses (i.e. RandomSearch, DFS, BFS, UCS, Greedy, and AStar)"""
 
     def __init__(self, *args, **kwargs):
-        """Initialize self.total_extends and self.total_enqueues to 0s. 
+        """Initialize self.total_extends and self.total_enqueues to 0s.
         Subclasses should initialize an empty frontier that enqueue() and dequeue() operate on.
         """
         super().__init__()
@@ -33,8 +33,10 @@ class GoalSearchAgent():
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless some property (e.g. depth/path cost) exceeds the cutoff """
         # Subclasses will override and implement.
+        if !state.depth>cutoff or !state.path_cost>cutoff:
+            self.frontier.append(state)
         raise NotImplementedError
-        
+
     def dequeue(self) -> StateNode:
         """ Choose, remove, and return a state from the frontier """
         # Subclasses will override and implement.
@@ -42,10 +44,9 @@ class GoalSearchAgent():
 
     """ search to be implemented by ALGORITHM partial subclasses (i.e. TreeSearch, GraphSearch, AnytimeSearch)"""
 
-    def search(self, 
-            initial_state : StateNode, 
+    def search(self, initial_state : StateNode,
             gui_callback_fn : Callable[[StateNode],bool] = lambda : False,
-            cutoff : Union[int, float] = INF 
+            cutoff : Union[int, float] = INF
             ) -> Optional[StateNode]:
         """ To be overridden by algorithm subclasses (TreeSearchAgent, GraphSearchAgent, AnytimeSearchAlgorithm)
         Returns a StateNode representing a solution path to the goal state, or None if search failed.
@@ -59,7 +60,7 @@ class RandomSearch(GoalSearchAgent):
     that implements search (i.e. TreeSearchAgent or GraphSearchAgent)
     """
     frontier : List[StateNode]
-    
+
     def __init__(self, *args, **kwargs):
         """ Initialize self.total_extends and self.total_enqueues (done in super().__init__())
         Create an empty frontier queue.
@@ -67,13 +68,13 @@ class RandomSearch(GoalSearchAgent):
         super().__init__(*args, **kwargs) # pass any unused parameters to any superclasses
         self.frontier = []
 
-        
+
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless depth exceeds the cutoff """
         if state.depth < cutoff:
             self.frontier.append(state)
 
-        
+
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return a random state from the frontier."""
         s = random.choice(self.frontier)
@@ -88,22 +89,22 @@ class TreeSearchAlgorithm(GoalSearchAgent):
     Needs to be mixed in with a "strategy" subclass of GoalSearchAgent that
     implements the other methods (i.e. RandomSearch, DFS, BFS, UCS, etc.)
     """
-    def search(self, 
-            initial_state : StateNode, 
+    def search(self,
+            initial_state : StateNode,
             gui_callback_fn : Callable[[StateNode],bool] = lambda : False,
-            cutoff : Union[int, float] = INF 
+            cutoff : Union[int, float] = INF
             ) -> Optional[StateNode]:
         """ Perform a search from the initial_state. Here is the pseudocode:
-        
+
         - Enqueue the initial_state in the frontier
         - Repeat while there are still StateNodes in the frontier:
             1) Dequeue a StateNode
             2) If the StateNode is a goal state, return it (end the search)
-            3*) Call gui_callback_fn, passing it the dequeued StateNode. If it returns True, 
+            3*) Call gui_callback_fn, passing it the dequeued StateNode. If it returns True,
                 end the search (the user has terminated early)
-            4) Extend the dequeued state by enqueueing all its neighboring states. 
-                - Implement the "no backtracking" optimization: do not enqueue parent states 
-                - Pass the cutoff parameter to enqueue. 
+            4) Extend the dequeued state by enqueueing all its neighboring states.
+                - Implement the "no backtracking" optimization: do not enqueue parent states
+                - Pass the cutoff parameter to enqueue.
                 - Update self.total_extends and self.total_enqueues appropriately
         - If the search ends because the frontier is empty or gui_callback_fn ended the search
         early, return None.
@@ -120,26 +121,26 @@ class DepthFirstSearch(GoalSearchAgent):
     To be subclassed (multiple inheritance) with a mixin that
     that implements search (i.e. TreeSearchAgent or GraphSearchAgent)
 
-    DFS is implemented with a LIFO queue. A list is an efficient one. 
+    DFS is implemented with a LIFO queue. A list is an efficient one.
     """
-    
+
     def __init__(self, *args, **kwargs):
         """ Initialize self.total_extends and self.total_enqueues (done in super().__init__())
         Create an empty frontier queue.
         """
         super().__init__(*args, **kwargs)
         # TODO initiate frontier data structure
-        
+
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless depth exceeds the cutoff """
-        # TODO 
+        # TODO
         raise NotImplementedError
 
 
-        
+
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the MOST RECENTLY ADDED state from the frontier."""
-        # TODO 
+        # TODO
         raise NotImplementedError
 
 class BreadthFirstSearch(GoalSearchAgent):
@@ -147,27 +148,27 @@ class BreadthFirstSearch(GoalSearchAgent):
     To be subclassed (multiple inheritance) with a mixin that
     that implements a search algorithm (i.e. TreeSearchAgent or GraphSearchAgent)
 
-    BFS is implemented with a FIFO queue. 
-    Lists are bad FIFO queues, but the deque data structure is an efficient implementation. 
+    BFS is implemented with a FIFO queue.
+    Lists are bad FIFO queues, but the deque data structure is an efficient implementation.
     Check out the documentation of deque: https://docs.python.org/3/library/collections.html#collections.deque
     """
-    
+
     def __init__(self, *args, **kwargs):
         """ Initialize self.total_extends and self.total_enqueues (done in super().__init__())
         Create an empty frontier queue.
         """
         super().__init__(*args, **kwargs)
         # TODO initiate frontier data structure
-        
+
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless depth exceeds the cutoff """
-        # TODO 
+        # TODO
         raise NotImplementedError
 
-        
+
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the LEAST RECENTLY ADDED state from the frontier."""
-        # TODO 
+        # TODO
         raise NotImplementedError
 
 
@@ -177,16 +178,16 @@ class UniformCostSearch(GoalSearchAgent):
     To be subclassed (multiple inheritance) with a mixin that
     that implements a search algorithm (i.e. TreeSearchAgent or GraphSearchAgent)
 
-    UCS is implemented with a priority queue, which is typically a heap data structure. 
+    UCS is implemented with a priority queue, which is typically a heap data structure.
     The heapq library allows you to use a list as a efficient heap.
     (heapq.heappush and heapq.heappop are the main methods).
-    Since states aren't ordered, the elements of the list-heap should be 
+    Since states aren't ordered, the elements of the list-heap should be
     tuples of (priority_value, statenode). heapq orders elements by the first element.
 
     Check out the documentation of heapq: https://docs.python.org/3/library/heapq.html
     """
     frontier : List[Tuple[float, StateNode]]
-    
+
     def __init__(self,*args, **kwargs):
         """ Initialize self.total_extends and self.total_enqueues (done in super().__init__())
         Create an empty frontier queue.
@@ -195,23 +196,23 @@ class UniformCostSearch(GoalSearchAgent):
         # TODO initiate frontier data structure
 
 
-        
+
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless path COST exceeds the cutoff """
-        # TODO 
+        # TODO
         raise NotImplementedError
 
-        
+
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the state with LOWEST PATH COST from the frontier."""
-        # TODO 
+        # TODO
         raise NotImplementedError
 
 
 class GraphSearchAlgorithm(GoalSearchAgent):
     """
     Mixin class for the graph search (extended state filter) algorithm.
-    
+
     Needs to be mixed in with a "strategy" subclass of GoalSearchAgent that
     implements the other methods (i.e. RandomSearch, DFS, BFS, UCS, etc.)
 
@@ -220,18 +221,18 @@ class GraphSearchAlgorithm(GoalSearchAgent):
     The "in" keyword invokes a key lookup.
     Check out the documentation: https://docs.python.org/3/tutorial/datastructures.html#sets
     """
-    def search(self, 
-            initial_state : StateNode, 
+    def search(self,
+            initial_state : StateNode,
             gui_callback_fn : Callable[[StateNode],bool] = lambda : False,
-            cutoff : Union[int, float] = INF 
+            cutoff : Union[int, float] = INF
             ) -> Optional[StateNode]:
         """ Perform a search from the initial_state, which constitutes the initial frontier.
-        
-        Graph search is similar to tree search, but it manages an "extended filter" 
+
+        Graph search is similar to tree search, but it manages an "extended filter"
         to avoid re-extending previously extended states again.
 
         Create a set of extended states. Before extending any state, check if the state has already been extended.
-        If so, skip it. Otherwise, extend and add to the set. 
+        If so, skip it. Otherwise, extend and add to the set.
         """
         ext_filter : Set[StateNode] = set() # Create an empty extended state filter
 
@@ -252,20 +253,20 @@ class InformedSearchAgent(GoalSearchAgent):
 
     def __init__(self, heuristic : Callable[[StateNode],float], *args, **kwargs):
         """ To be overridden by subclasses (RandomWalk, RandomSearch, DFS, BFS, UCS, Greedy, and AStar)
-        Create an empty frontier queue, 
-        and initialize self.total_extends and self.total_enqueues to 0s. 
+        Create an empty frontier queue,
+        and initialize self.total_extends and self.total_enqueues to 0s.
         Will be called by GUI before any search.
         """
         super().__init__(heuristic = heuristic, *args, **kwargs) # pass any unused parameters to any superclasses
         self.heuristic = heuristic
-    
+
 
 class GreedyBestSearch(InformedSearchAgent):
     """ Partial class representing a search strategy.
     To be subclassed (multiple inheritance) with a mixin that
     that implements a search algorithm (i.e. TreeSearchAgent or GraphSearchAgent)
 
-    Greedy Best is implemented with a priority queue. 
+    Greedy Best is implemented with a priority queue.
     """
     frontier : List[Tuple[float, StateNode]]
 
@@ -273,22 +274,22 @@ class GreedyBestSearch(InformedSearchAgent):
         """ Initialize self.total_extends and self.total_enqueues(done in super().__init__())
         Create an empty frontier queue.
         Also takes the heuristic function to be used as an estimate
-        of the remaining cost to goal. 
+        of the remaining cost to goal.
         """
         super().__init__(heuristic)
         # TODO initiate frontier data structure
 
 
-        
+
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless path COST exceeds the cutoff """
-        # TODO 
+        # TODO
         raise NotImplementedError
 
-        
+
     def dequeue(self) -> Tuple[float, StateNode]:
         """  Choose and remove the state with LOWEST ESTIMATED REMAINING COST TO GOAL from the frontier."""
-        # TODO 
+        # TODO
         raise NotImplementedError
 
 
@@ -297,7 +298,7 @@ class AStarSearch(InformedSearchAgent):
     To be subclassed (multiple inheritance) with a mixin that
     that implements a search algorithm (i.e. TreeSearchAgent or GraphSearchAgent)
 
-    A* is implemented with a priority queue. 
+    A* is implemented with a priority queue.
     """
     frontier : List[Tuple[float, StateNode]]
 
@@ -305,23 +306,23 @@ class AStarSearch(InformedSearchAgent):
         """ Initialize self.total_extends and self.total_enqueues (done in super().__init__())
         Create an empty frontier queue.
         Also takes the heuristic function to be used as an estimate
-        of remaining path cost. 
+        of remaining path cost.
         """
         super().__init__(heuristic, *args, **kwargs)
         # TODO initiate frontier data structure
 
 
-        
+
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless path COST exceeds the cutoff """
-       # TODO 
+       # TODO
         raise NotImplementedError
 
 
-        
+
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the state with LOWEST ESTIMATED TOTAL PATH COST from the frontier."""
-        # TODO 
+        # TODO
         raise NotImplementedError
 
 
@@ -329,9 +330,9 @@ class AStarSearch(InformedSearchAgent):
 """ Informed search algorithms can be reconfigured to provide a "closest" answer
 if . This often happens because of early termination (by max length/cost cutoff or time limit).
 
-The change is simple: during search, keep track of the state/path that is closest to the goal, 
+The change is simple: during search, keep track of the state/path that is closest to the goal,
 according to the cost heuristic, and return it if the search ultimately fails/terminates early.
- 
+
 This is sometimes known as an "anytime" algorithm, because the algorithm can have at least
 *some* useful result anytime the agent needs one.
 """
@@ -340,21 +341,21 @@ class AnytimeSearchAlgorithm(InformedSearchAgent):
     """
     Mixin class for "anytime" graph search algorithm.
 
-    If terminating without finding the solution, returns the "best so far" solution with 
+    If terminating without finding the solution, returns the "best so far" solution with
     the lowest estimated cost to goal, according to self.heuristic.
-    
+
     Needs to be mixed in with a "strategy" subclass of GoalSearchAgent that
     implements the other methods (i.e. RandomSearch, DFS, BFS, UCS, etc.)
     """
 
-    def search(self, 
-            initial_state : StateNode, 
+    def search(self,
+            initial_state : StateNode,
             gui_callback_fn : Callable[[StateNode],bool] = lambda : False,
-            cutoff : Union[int, float] = INF 
+            cutoff : Union[int, float] = INF
             ) -> Optional[StateNode]:
         """ Perform an "Anytime" search from the initial_state
 
-        This is the same as a graph search, but even if the search fails to find a solution, 
+        This is the same as a graph search, but even if the search fails to find a solution,
         it should always return the lowest-cost StateNode path  to the state closest* to the solution found so far.
         *Closest according to the agent's heuristic.
         """
@@ -366,8 +367,8 @@ class AnytimeSearchAlgorithm(InformedSearchAgent):
 # Collection of all the above. If you write other ones, add them here.
 
 ALGORITHMS : Dict[str, Type[GoalSearchAgent] ] = {
-    "tree": TreeSearchAlgorithm, 
-    "graph": GraphSearchAlgorithm, 
+    "tree": TreeSearchAlgorithm,
+    "graph": GraphSearchAlgorithm,
     "anytime" : AnytimeSearchAlgorithm
 }
 
@@ -415,8 +416,8 @@ or simplified memory-bounded A* (SMA*).
 
 
 """ C) Improve upon these implementations! The framework given to you here
-was designed to facilitate learning, not necessarily efficiency. 
+was designed to facilitate learning, not necessarily efficiency.
 There are many ways these algorithms can be improved in terms of speed and memory usage.
-Furthermore, and problem-specific agents can usually take advantage of 
-specific properties for even more efficiency. 
+Furthermore, and problem-specific agents can usually take advantage of
+specific properties for even more efficiency.
 """

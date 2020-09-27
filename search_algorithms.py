@@ -39,7 +39,10 @@ class GoalSearchAgent():
     def dequeue(self) -> StateNode:
         """ Choose, remove, and return a state from the frontier """
         # Subclasses will override and implement.
-        raise NotImplementedError
+        randomState = random.choice(self.frontier)
+        self.frontier.remove(randomState)
+        return randomState
+        #raise NotImplementedError
 
     """ search to be implemented by ALGORITHM partial subclasses (i.e. TreeSearch, GraphSearch, AnytimeSearch)"""
 
@@ -97,7 +100,7 @@ class TreeSearchAlgorithm(GoalSearchAgent):
 
         - Enqueue the initial_state in the frontier
         - Repeat while there are still StateNodes in the frontier:
-            1) Dequeue a StateNode
+            1) a StateNode
             2) If the StateNode is a goal state, return it (end the search)
             3*) Call gui_callback_fn, passing it the dequeued StateNode. If it returns True,
                 end the search (the user has terminated early)

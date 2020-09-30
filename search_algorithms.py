@@ -70,7 +70,7 @@ class RandomSearch(GoalSearchAgent):
         
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless depth exceeds the cutoff """
-        if state.depth < cutoff:
+        if state.depth <= cutoff:
             self.frontier.append(state)
 
         
@@ -184,7 +184,7 @@ class BreadthFirstSearch(GoalSearchAgent):
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless depth exceeds the cutoff """
         if not state.depth>cutoff:
-            self.enqueue(state)
+            self.frontier.append(state)
         # TODO 
         
 

@@ -121,14 +121,15 @@ class TreeSearchAlgorithm(GoalSearchAgent):
             for action in s.get_all_actions():
                 if gui_callback_fn(s.get_next_state(action)):
                     break
-                ancestors = []
                 temp = s
+                ancestors = []
                 while temp.parent:
                     ancestors.append(temp.parent)
                     temp = temp.parent
                 if s.get_next_state(action) not in ancestors:
                     self.enqueue(s.get_next_state(action), cutoff)
                     self.total_enqueues += 1
+                ancestors.clear()
             self.total_extends += 1
 
         return None
@@ -141,25 +142,31 @@ class DepthFirstSearch(GoalSearchAgent):
 
     DFS is implemented with a LIFO queue. A list is an efficient one. 
     """
-    
+
+    frontier : List[StateNode]
+
     def __init__(self, *args, **kwargs):
         """ Initialize self.total_extends and self.total_enqueues (done in super().__init__())
         Create an empty frontier queue.
         """
         super().__init__(*args, **kwargs)
         # TODO initiate frontier data structure
+        self.total_extends = 0
+        self.total_enqueues = 0
+        self.frontier = []
         
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless depth exceeds the cutoff """
         # TODO 
-        raise NotImplementedError
-
-
+        if state.depth < cutoff:
+            self.frontier.append(state)
         
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the MOST RECENTLY ADDED state from the frontier."""
-        # TODO 
-        raise NotImplementedError
+        # TODO
+        s = self.frontier[-1]
+        self.frontier.remove(s)
+        return s
 
 class BreadthFirstSearch(GoalSearchAgent):
     """ Partial class representing the Breadth First Search strategy.
@@ -212,19 +219,23 @@ class UniformCostSearch(GoalSearchAgent):
         """
         super().__init__(*args, **kwargs)
         # TODO initiate frontier data structure
-
+        self.total_extends = 0
+        self.total_enqueues = 0
+        self.frontier = []
 
         
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless path COST exceeds the cutoff """
         # TODO 
-        raise NotImplementedError
+        if state.path_cost <= cutoff:
+            heapq.heappush(self.frontier, (state.path_cost, state))
 
         
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the state with LOWEST PATH COST from the frontier."""
         # TODO 
-        raise NotImplementedError
+        s = heapq.heappop(self.frontier)
+        return s[1]
 
 
 class GraphSearchAlgorithm(GoalSearchAgent):

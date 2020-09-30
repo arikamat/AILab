@@ -112,6 +112,25 @@ class TreeSearchAlgorithm(GoalSearchAgent):
         """
 
         #TODO implement!
+        self.enqueue(initial_state, cutoff)
+        self.total_enqueues += 1
+        while self.frontier:
+            s = self.dequeue()
+            if s.is_goal_state():
+               return s
+            for action in s.get_all_actions():
+                if gui_callback_fn(s.get_next_state(action)):
+                    break
+                ancestors = []
+                temp = s
+                while temp.parent:
+                    ancestors.append(temp.parent)
+                    temp = temp.parent
+                if s.get_next_state(action) not in ancestors:
+                    self.enqueue(s.get_next_state(action), cutoff)
+                    self.total_enqueues += 1
+            self.total_extends += 1
+
         return None
 
 

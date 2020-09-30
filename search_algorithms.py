@@ -177,24 +177,30 @@ class BreadthFirstSearch(GoalSearchAgent):
     Lists are bad FIFO queues, but the deque data structure is an efficient implementation. 
     Check out the documentation of deque: https://docs.python.org/3/library/collections.html#collections.deque
     """
-    
+    frontier :Collection[StateNode]
     def __init__(self, *args, **kwargs):
         """ Initialize self.total_extends and self.total_enqueues (done in super().__init__())
         Create an empty frontier queue.
         """
         super().__init__(*args, **kwargs)
+        self.total_extends=0
+        self.total_enqueues=0
+        self.frontier=[]
         # TODO initiate frontier data structure
         
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless depth exceeds the cutoff """
-        # TODO 
-        raise NotImplementedError
+        if not state.depth>cutoff: #state.depth>=cutoff
+            self.frontier.append(state)
+        
 
         
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the LEAST RECENTLY ADDED state from the frontier."""
         # TODO 
-        raise NotImplementedError
+        choice = self.frontier[0]
+        self.frontier.remove(choice)
+        return choice
 
 
 

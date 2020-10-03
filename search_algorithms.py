@@ -269,6 +269,26 @@ class GraphSearchAlgorithm(GoalSearchAgent):
         ext_filter : Set[StateNode] = set() # Create an empty extended state filter
 
         #TODO implement! (You may start by copying your TreeSearch's code)
+                # enqueue initial state
+        self.enqueue(initial_state, cutoff)
+        self.total_enqueues += 1
+        ext_filter = []
+        while self.frontier:
+            # dequeue node
+            s = self.dequeue()
+            # check if it is a goal state
+            if s.is_goal_state():
+               return s
+            # extend node
+            if s not in ext_filter:
+                for action in s.get_all_actions():
+                    if gui_callback_fn(s):
+                        break
+                    if s.get_next_state(action) != s.parent:
+                        self.enqueue(s.get_next_state(action), cutoff)
+                        self.total_enqueues += 1
+                self.total_extends += 1
+                ext_filter.append(s)
         return None
 
 

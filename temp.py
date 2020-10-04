@@ -1,0 +1,3 @@
+Coordinate(get_empty_pos().r - 1,get_empty_pos().c-1), Coordinate(get_empty_pos().r - 1,get_empty_pos().c),   Coordinate(get_empty_pos().r - 1,get_empty_pos().c+1),
+                          Coordinate(get_empty_pos().r,    get_empty_pos().c-1),                                                          Coordinate(get_empty_pos().r,    get_empty_pos().c+1),
+                          Coordinate(get_empty_pos().r + 1,get_empty_pos().c-1), Coordinate(get_empty_pos().r + 1,get_empty_pos().c), Coordinate(get_empty_pos().r + 1,  get_empty_pos().c+1)

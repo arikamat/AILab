@@ -121,8 +121,19 @@ class SlidePuzzleState(StateNode):
         The goal of the slide puzzle is to have the empty spot in the 0th row and 0th col,
         and then the rest of the numbered tiles in order down the rows!
         """
-        # TODO implement!
-        return False
+        #THIS WAS A TODO
+        n= self.get_size()
+        if get_empty_pos() != Coordinate(0,0):
+             return False
+        else:
+            iteration =1
+            for r in range(n):
+                for c in range(n):
+                    if c != 0 and r!=0:
+                        if get_tile_at(Coordinate(r,c)) != iteration:
+                            return False
+                        iteration +=1
+            return True
     
     # Override
     def is_legal_action(self, action : Coordinate) -> bool:
@@ -131,21 +142,34 @@ class SlidePuzzleState(StateNode):
         Actions in the slide puzzle environment involve moving a tile into
         the adjacent empty spot.
         
-        Actions are Coordinate objects, specifying the position of the tile that
+        Actions are Coordinate objects, specifyi ng the position of the tile that
         is to be moved into the empty slot. That Coordinate needs to be not out of bounds, and 
         actually adjacent to the emty slot.
         """
-        # TODO implement!
-        return False
+        # THIS WAS A TODO
+        n=self.get_size()
+        adjacentCoords = [Coordinate(get_empty_pos().r - 1,get_empty_pos().c-1), Coordinate(get_empty_pos().r - 1,get_empty_pos().c),   Coordinate(get_empty_pos().r - 1,get_empty_pos().c+1),
+                          Coordinate(get_empty_pos().r,    get_empty_pos().c-1),                                                        Coordinate(get_empty_pos().r,    get_empty_pos().c+1),
+                          Coordinate(get_empty_pos().r + 1,get_empty_pos().c-1), Coordinate(get_empty_pos().r + 1,get_empty_pos().c),   Coordinate(get_empty_pos().r + 1,  get_empty_pos().c+1)
+        ]
+        if not action in adjacentCoords:
+            return False
+        if action.r > n or action.c >n or action.r <0 or action.c <0:
+            return False
+        return True
     
 
     # Override
     def get_all_actions(self) -> Iterable[Coordinate]:
         """Return all legal actions at this state."""
-        # TODO implement! This is a good candidate for using yield (generator function)
-        yield from ()
-        # alternatively, return a list, tuple, or use comprehension
-        return []
+        #THIS WAS A TODO
+        list = []
+        n = self.get_size()
+        for r in range(n):
+            for c in range(n):
+                if self.is_legal_action(Coordinate(r,c)):
+                    list.append(Coordinate(r,c))
+        return tuple(list)
         
 
     # Override

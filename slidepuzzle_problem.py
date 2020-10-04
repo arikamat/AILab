@@ -159,12 +159,16 @@ class SlidePuzzleState(StateNode):
         actually adjacent to the emty slot.
         """
         # TODO implement! WRONG
-        if 0 <= action.r < self.get_size() and 0 <= action.c < self.get_size():
-            if action.r - self.empty_pos.r == 0 and abs(action.c - self.empty_pos.c) == 1:
-                return True
-            if action.c - self.empty_pos.c == 0 and abs(action.r - self.empty_pos.r) == 1:
-                return True
-        return False
+        n=self.get_size()
+        adjacentCoords = [Coordinate(self.get_empty_pos().r - 1,self.get_empty_pos().c),
+                          Coordinate(self.get_empty_pos().r,    self.get_empty_pos().c-1),Coordinate(self.get_empty_pos().r,    self.get_empty_pos().c+1),
+                          Coordinate(self.get_empty_pos().r + 1,self.get_empty_pos().c),
+        ]
+        if not action in adjacentCoords:
+            return False
+        if action.r >= n or action.c >= n or action.r <0 or action.c <0:
+            return False
+        return True
     
 
     # Override
@@ -174,7 +178,7 @@ class SlidePuzzleState(StateNode):
         # alternatively, return a list, tuple, or use comprehension
         row = self.empty_pos.r
         col = self.empty_pos.c
-        return [action for action in (Coordinate(row, col+1), Coordinate(row+1, 0), Coordinate(row, col-1), Coordinate(row-1, 0))
+        return [action for action in (Coordinate(row, col+1), Coordinate(row+1, col), Coordinate(row, col-1), Coordinate(row-1, col))
             if self.is_legal_action(action)]
         
 

@@ -42,9 +42,27 @@ class SlidePuzzleState(StateNode):
         with open(filename, 'r') as file:
             # TODO read file and return an initial SlidePuzzleState.
             # This return statement is just a dummy.
+            n = int(file.readline())
+            # create tiles
+            tiles = []
+            for x in range(n):
+                tiles.append([int(num) for num in file.readline().split()])
+            # find empty_pos
+            r = 0
+            c = 0
+            for row in tiles:
+                for col in row:
+                    if col == 0:
+                        empty_pos = Coordinate(r, c)
+                        break
+                    c += 1
+                r += 1
+                c = 0
+                
+                    
             return SlidePuzzleState( 
-                tiles = ((0,),), # tuple of tuple of 0, dummy value
-                empty_pos = Coordinate(0,0), # dummy value
+                tiles = tuple(tuple(row) for row in tiles),
+                empty_pos = empty_pos,
                 parent = None,
                 last_action = None,
                 depth = 0,
@@ -148,9 +166,9 @@ class SlidePuzzleState(StateNode):
         """
         # THIS WAS A TODO
         n=self.get_size()
-        adjacentCoords = [Coordinate(self.get_empty_pos().r - 1,self.get_empty_pos().c-1), Coordinate(self.get_empty_pos().r - 1,self.get_empty_pos().c), Coordinate(self.get_empty_pos().r - 1,self.get_empty_pos().c+1),
-                          Coordinate(self.get_empty_pos().r,    self.get_empty_pos().c-1),                                                                Coordinate(self.get_empty_pos().r,    self.get_empty_pos().c+1),
-                          Coordinate(self.get_empty_pos().r + 1,self.get_empty_pos().c-1), Coordinate(self.get_empty_pos().r + 1,self.get_empty_pos().c), Coordinate(self.get_empty_pos().r + 1,self.get_empty_pos().c+1)
+        adjacentCoords = [Coordinate(self.get_empty_pos().r - 1,self.get_empty_pos().c),
+                          Coordinate(self.get_empty_pos().r,    self.get_empty_pos().c-1),Coordinate(self.get_empty_pos().r,self.get_empty_pos().c+1),
+                          Coordinate(self.get_empty_pos().r + 1,self.get_empty_pos().c)
         ]
         if not action in adjacentCoords:
             return False
@@ -186,13 +204,20 @@ class SlidePuzzleState(StateNode):
 
     # Override
     def get_next_state(self, action : Coordinate) -> SlidePuzzleState:
-        """ Return a new StateNode that represents the state that results from taking the given action from this state.
-        The new StateNode object should have this StateNode (self) as its parent, and action as its last_action.
-
-        -- action is assumed legal (is_legal_action called before), but a ValueError may be passed for illegal actions if desired.
-        """
-       # TODO implement! Remember that this returns a NEW state, and doesn't change this one.
-        return StateNode.__init__(parent = self, last_action = action, depth = self.depth, path_cost = self.path_cost)
+        new_tiles = list(list(row) for row in self.tiles)
+        temp = new_tiles[action.r][action.c]
+        new_tiles[action.r][action.c] = 0
+        new_tiles[self.empty_pos.r][self.empty_pos.c] = temp
+        
+        return SlidePuzzleState( 
+                tiles = tuple(tuple(row) for row in new_tiles),
+                empty_pos = action,
+                parent = self,
+                last_action = action,
+                depth = self.depth + 1,
+                path_cost = self.path_cost + 1,
+            )
+        
         
 
     """ You may add additional methods that may be useful! """

@@ -123,7 +123,7 @@ class SlidePuzzleState(StateNode):
         """
         #THIS WAS A TODO
         n= self.get_size()
-        if get_empty_pos() != Coordinate(0,0):
+        if self.get_empty_pos() != Coordinate(0,0):
              return False
         else:
             iteration =1
@@ -192,7 +192,7 @@ class SlidePuzzleState(StateNode):
         -- action is assumed legal (is_legal_action called before), but a ValueError may be passed for illegal actions if desired.
         """
        # TODO implement! Remember that this returns a NEW state, and doesn't change this one.
-        return self
+        return StateNode.__init__(parent = self, last_action = action, depth = self.depth, path_cost = self.path_cost)
         
 
     """ You may add additional methods that may be useful! """

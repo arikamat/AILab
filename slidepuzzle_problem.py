@@ -1,5 +1,5 @@
 # Lab 1, Part 1b: Problem Representation.
-# Name(s): 
+# Name(s): Ari Kamat, Norikazu Kawasaki
 
 from __future__ import annotations
 from typing import Optional, Any, Hashable, Sequence, Iterable, Dict, Union, List, Tuple, NamedTuple
@@ -40,8 +40,7 @@ class SlidePuzzleState(StateNode):
         The number 0 represents the blank tile. 
         """
         with open(filename, 'r') as file:
-            # TODO read file and return an initial SlidePuzzleState.
-            # This return statement is just a dummy.
+            # TODO read file and return an initial SlidePuzzleState. FINISHED
             n = int(file.readline())
             # create tiles
             tiles = []
@@ -139,19 +138,14 @@ class SlidePuzzleState(StateNode):
         The goal of the slide puzzle is to have the empty spot in the 0th row and 0th col,
         and then the rest of the numbered tiles in order down the rows!
         """
-        #THIS WAS A TODO
-        n= self.get_size()
-        if self.get_empty_pos() != Coordinate(0,0):
-             return False
-        else:
-            iteration =1
-            for r in range(n):
-                for c in range(n):
-                    if c != 0 and r!=0:
-                        if get_tile_at(Coordinate(r,c)) != iteration:
-                            return False
-                        iteration +=1
+        # TODO implement! FINISHED
+        n = self.get_size()
+        goal = []
+        for i in range(n):
+            goal.append([i*n + x for x in range(n)])
+        if self.tiles == tuple(tuple(row) for row in goal):
             return True
+        return False
     
     # Override
     def is_legal_action(self, action : Coordinate) -> bool:
@@ -160,19 +154,19 @@ class SlidePuzzleState(StateNode):
         Actions in the slide puzzle environment involve moving a tile into
         the adjacent empty spot.
         
-        Actions are Coordinate objects, specifyi ng the position of the tile that
+        Actions are Coordinate objects, specifying the position of the tile that
         is to be moved into the empty slot. That Coordinate needs to be not out of bounds, and 
         actually adjacent to the emty slot.
         """
-        # THIS WAS A TODO
+        # TODO implement! WRONG
         n=self.get_size()
         adjacentCoords = [Coordinate(self.get_empty_pos().r - 1,self.get_empty_pos().c),
-                          Coordinate(self.get_empty_pos().r,    self.get_empty_pos().c-1),Coordinate(self.get_empty_pos().r,self.get_empty_pos().c+1),
-                          Coordinate(self.get_empty_pos().r + 1,self.get_empty_pos().c)
+                          Coordinate(self.get_empty_pos().r,    self.get_empty_pos().c-1),Coordinate(self.get_empty_pos().r,    self.get_empty_pos().c+1),
+                          Coordinate(self.get_empty_pos().r + 1,self.get_empty_pos().c),
         ]
         if not action in adjacentCoords:
             return False
-        if action.r > n or action.c >n or action.r <0 or action.c <0:
+        if action.r >= n or action.c >= n or action.r <0 or action.c <0:
             return False
         return True
     
@@ -180,14 +174,12 @@ class SlidePuzzleState(StateNode):
     # Override
     def get_all_actions(self) -> Iterable[Coordinate]:
         """Return all legal actions at this state."""
-        #THIS WAS A TODO
-        list = []
-        n = self.get_size()
-        for r in range(n):
-            for c in range(n):
-                if self.is_legal_action(Coordinate(r,c)):
-                    list.append(Coordinate(r,c))
-        return tuple(list)
+        # TODO implement! This is a good candidate for using yield (generator function) FINISHED
+        # alternatively, return a list, tuple, or use comprehension
+        row = self.empty_pos.r
+        col = self.empty_pos.c
+        return [action for action in (Coordinate(row, col+1), Coordinate(row+1, col), Coordinate(row, col-1), Coordinate(row-1, col))
+            if self.is_legal_action(action)]
         
 
     # Override
@@ -204,6 +196,12 @@ class SlidePuzzleState(StateNode):
 
     # Override
     def get_next_state(self, action : Coordinate) -> SlidePuzzleState:
+        """ Return a new StateNode that represents the state that results from taking the given action from this state.
+        The new StateNode object should have this StateNode (self) as its parent, and action as its last_action.
+
+        -- action is assumed legal (is_legal_action called before), but a ValueError may be passed for illegal actions if desired.
+        """
+       # TODO implement! Remember that this returns a NEW state, and doesn't change this one. FINISHED
         new_tiles = list(list(row) for row in self.tiles)
         temp = new_tiles[action.r][action.c]
         new_tiles[action.r][action.c] = 0
@@ -217,7 +215,6 @@ class SlidePuzzleState(StateNode):
                 depth = self.depth + 1,
                 path_cost = self.path_cost + 1,
             )
-        
         
 
     """ You may add additional methods that may be useful! """

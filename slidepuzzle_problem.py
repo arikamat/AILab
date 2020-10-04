@@ -1,5 +1,5 @@
 # Lab 1, Part 1b: Problem Representation.
-# Name(s): 
+# Name(s): Ari Kamat, Norikazu Kawasaki
 
 from __future__ import annotations
 from typing import Optional, Any, Hashable, Sequence, Iterable, Dict, Union, List, Tuple, NamedTuple
@@ -40,11 +40,28 @@ class SlidePuzzleState(StateNode):
         The number 0 represents the blank tile. 
         """
         with open(filename, 'r') as file:
-            # TODO read file and return an initial SlidePuzzleState.
-            # This return statement is just a dummy.
+            # TODO read file and return an initial SlidePuzzleState. FINISHED
+            n = int(file.readline())
+            # create tiles
+            tiles = []
+            for x in range(n):
+                tiles.append([int(num) for num in file.readline().split()])
+            # find empty_pos
+            r = 0
+            c = 0
+            for row in tiles:
+                for col in row:
+                    if col == 0:
+                        empty_pos = Coordinate(r, c)
+                        break
+                    c += 1
+                r += 1
+                c = 0
+                
+                    
             return SlidePuzzleState( 
-                tiles = ((0,),), # tuple of tuple of 0, dummy value
-                empty_pos = Coordinate(0,0), # dummy value
+                tiles = tuple(tuple(row) for row in tiles),
+                empty_pos = empty_pos,
                 parent = None,
                 last_action = None,
                 depth = 0,
@@ -121,7 +138,13 @@ class SlidePuzzleState(StateNode):
         The goal of the slide puzzle is to have the empty spot in the 0th row and 0th col,
         and then the rest of the numbered tiles in order down the rows!
         """
-        # TODO implement!
+        # TODO implement! FINISHED
+        n = self.get_size()
+        goal = []
+        for i in range(n):
+            goal.append([i*n + x for x in range(n)])
+        if self.tiles == tuple(tuple(row) for row in goal):
+            return True
         return False
     
     # Override
@@ -135,17 +158,24 @@ class SlidePuzzleState(StateNode):
         is to be moved into the empty slot. That Coordinate needs to be not out of bounds, and 
         actually adjacent to the emty slot.
         """
-        # TODO implement!
+        # TODO implement! WRONG
+        if 0 <= action.r < self.get_size() and 0 <= action.c < self.get_size():
+            if action.r - self.empty_pos.r == 0 and abs(action.c - self.empty_pos.c) == 1:
+                return True
+            if action.c - self.empty_pos.c == 0 and abs(action.r - self.empty_pos.r) == 1:
+                return True
         return False
     
 
     # Override
     def get_all_actions(self) -> Iterable[Coordinate]:
         """Return all legal actions at this state."""
-        # TODO implement! This is a good candidate for using yield (generator function)
-        yield from ()
+        # TODO implement! This is a good candidate for using yield (generator function) FINISHED
         # alternatively, return a list, tuple, or use comprehension
-        return []
+        row = self.empty_pos.r
+        col = self.empty_pos.c
+        return [action for action in (Coordinate(row, col+1), Coordinate(row+1, 0), Coordinate(row, col-1), Coordinate(row-1, 0))
+            if self.is_legal_action(action)]
         
 
     # Override
@@ -167,8 +197,20 @@ class SlidePuzzleState(StateNode):
 
         -- action is assumed legal (is_legal_action called before), but a ValueError may be passed for illegal actions if desired.
         """
-       # TODO implement! Remember that this returns a NEW state, and doesn't change this one.
-        return self
+       # TODO implement! Remember that this returns a NEW state, and doesn't change this one. FINISHED
+        new_tiles = list(list(row) for row in self.tiles)
+        temp = new_tiles[action.r][action.c]
+        new_tiles[action.r][action.c] = 0
+        new_tiles[self.empty_pos.r][self.empty_pos.c] = temp
+        
+        return SlidePuzzleState( 
+                tiles = tuple(tuple(row) for row in new_tiles),
+                empty_pos = action,
+                parent = self,
+                last_action = action,
+                depth = self.depth + 1,
+                path_cost = self.path_cost + 1,
+            )
         
 
     """ You may add additional methods that may be useful! """

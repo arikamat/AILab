@@ -1,5 +1,5 @@
 # Lab 1, Part 2a: Heuristics.
-# Name(s): 
+# Name(s): Ari Kamat, Norikazu Kawasaki
 
 from __future__ import annotations
 from typing import List, Collection, Tuple, Callable, Optional, Union, Set, Dict, Type, Iterable

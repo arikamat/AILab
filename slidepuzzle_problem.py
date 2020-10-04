@@ -148,9 +148,9 @@ class SlidePuzzleState(StateNode):
         """
         # THIS WAS A TODO
         n=self.get_size()
-        adjacentCoords = [Coordinate(get_empty_pos().r - 1,get_empty_pos().c-1), Coordinate(get_empty_pos().r - 1,get_empty_pos().c),   Coordinate(get_empty_pos().r - 1,get_empty_pos().c+1),
-                          Coordinate(get_empty_pos().r,    get_empty_pos().c-1),                                                        Coordinate(get_empty_pos().r,    get_empty_pos().c+1),
-                          Coordinate(get_empty_pos().r + 1,get_empty_pos().c-1), Coordinate(get_empty_pos().r + 1,get_empty_pos().c),   Coordinate(get_empty_pos().r + 1,  get_empty_pos().c+1)
+        adjacentCoords = [Coordinate(self.get_empty_pos().r - 1,self.get_empty_pos().c-1), Coordinate(self.get_empty_pos().r - 1,self.get_empty_pos().c), Coordinate(self.get_empty_pos().r - 1,self.get_empty_pos().c+1),
+                          Coordinate(self.get_empty_pos().r,    self.get_empty_pos().c-1),                                                                Coordinate(self.get_empty_pos().r,    self.get_empty_pos().c+1),
+                          Coordinate(self.get_empty_pos().r + 1,self.get_empty_pos().c-1), Coordinate(self.get_empty_pos().r + 1,self.get_empty_pos().c), Coordinate(self.get_empty_pos().r + 1,self.get_empty_pos().c+1)
         ]
         if not action in adjacentCoords:
             return False

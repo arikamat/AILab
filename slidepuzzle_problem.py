@@ -192,7 +192,6 @@ class SlidePuzzleState(StateNode):
         -- action is assumed legal (is_legal_action called before), but a ValueError may be passed for illegal actions if desired.
         """
        # TODO implement! Remember that this returns a NEW state, and doesn't change this one.
-        return StateNode.__init__(parent = self, last_action = action, depth = self.depth, path_cost = self.path_cost)
+        return SlidePuzzleState.__init__(tiles = self.tiles, empty_pos = self.empty_pos, parent = self, last_action= action, depth = self.depth,path_cost=self.path_cost)
         
-
     """ You may add additional methods that may be useful! """

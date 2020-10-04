@@ -1,5 +1,5 @@
 # Lab 1, Part 2a: Heuristics.
-# Name(s): 
+# Name(s): Ari Kamat, Norikazu Kawasaki
 
 from __future__ import annotations
 from typing import List, Collection, Tuple, Callable, Optional, Union, Set, Dict, Type, Iterable
@@ -155,7 +155,7 @@ class DepthFirstSearch(GoalSearchAgent):
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless depth exceeds the cutoff """
         # TODO 
-        if state.depth < cutoff:
+        if not state.depth > cutoff:
             self.frontier.append(state)
         
     def dequeue(self) -> StateNode:
@@ -187,7 +187,7 @@ class BreadthFirstSearch(GoalSearchAgent):
         
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless depth exceeds the cutoff """
-        if not state.depth>cutoff: #state.depth>=cutoff
+        if not state.depth > cutoff: #state.depth>=cutoff
             self.frontier.append(state)
         
 
@@ -230,7 +230,7 @@ class UniformCostSearch(GoalSearchAgent):
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless path COST exceeds the cutoff """
         # TODO 
-        if state.path_cost <= cutoff:
+        if not state.path_cost > cutoff:
             heapq.heappush(self.frontier, (state.path_cost, state))
 
         

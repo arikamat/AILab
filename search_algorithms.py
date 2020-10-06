@@ -329,21 +329,24 @@ class GreedyBestSearch(InformedSearchAgent):
         """
         super().__init__(heuristic)
         # TODO initiate frontier data structure
-
+        self.total_extends=0
+        self.total_enqueues=0
+        self.frontier=[]
 
         
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless path COST exceeds the cutoff """
-        # TODO 
-        raise NotImplementedError
+        if not state.path_cost >cutoff:
+            self.frontier.append(state)
+        
 
         
     def dequeue(self) -> Tuple[float, StateNode]:
         """  Choose and remove the state with LOWEST ESTIMATED REMAINING COST TO GOAL from the frontier."""
-        # TODO 
-        raise NotImplementedError
-
-
+        sortedFrontier = sorted(self.frontier, key = self.heuristic)
+        self.frontier.remove(sortedFrontier[0])
+        return sortedFrontier[0]
+    
 class AStarSearch(InformedSearchAgent):
     """ Partial class representing a search strategy.
     To be subclassed (multiple inheritance) with a mixin that

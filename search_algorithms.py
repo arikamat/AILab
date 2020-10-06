@@ -364,20 +364,25 @@ class AStarSearch(InformedSearchAgent):
         """
         super().__init__(heuristic, *args, **kwargs)
         # TODO initiate frontier data structure
-
+        self.total_extends = 0
+        self.total_enqueues = 0
+        self.frontier = []
 
         
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless path COST exceeds the cutoff """
        # TODO 
-        raise NotImplementedError
+        if not state.path_cost > cutoff:
+            heapq.heappush(self.frontier, (state.path_cost + self.heuristic(state), state))
+        
 
 
         
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the state with LOWEST ESTIMATED TOTAL PATH COST from the frontier."""
         # TODO 
-        raise NotImplementedError
+        s = heapq.heappop(self.frontier)
+        return s[1]
 
 
 

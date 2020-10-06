@@ -195,8 +195,7 @@ class BreadthFirstSearch(GoalSearchAgent):
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the LEAST RECENTLY ADDED state from the frontier."""
         # TODO 
-        choice = self.frontier[0]
-        self.frontier.remove(choice)
+        choice = self.frontier.pop(0)
         return choice
 
 

@@ -115,7 +115,7 @@ class TreeSearchAlgorithm(GoalSearchAgent):
         # enqueue initial state
         self.enqueue(initial_state, cutoff)
         self.total_enqueues += 1
-        while self.frontier:
+        while len(self.frontier)>0:
             # dequeue node
             s = self.dequeue()
             # check if it is a goal state
@@ -125,8 +125,9 @@ class TreeSearchAlgorithm(GoalSearchAgent):
             for action in s.get_all_actions():
                 if gui_callback_fn(s):
                     break
-                if s.get_next_state(action) != s.parent:
-                    self.enqueue(s.get_next_state(action), cutoff)
+                a = s.get_next_state(action=action)
+                if a != s.parent:
+                    self.enqueue(a, cutoff)
                     self.total_enqueues += 1
             self.total_extends += 1
         return None
@@ -161,8 +162,7 @@ class DepthFirstSearch(GoalSearchAgent):
     def dequeue(self) -> StateNode:
         """  Choose, remove, and return the MOST RECENTLY ADDED state from the frontier."""
         # TODO
-        s = self.frontier[-1]
-        self.frontier.remove(s)
+        s = self.frontier.pop()
         return s
 
 class BreadthFirstSearch(GoalSearchAgent):

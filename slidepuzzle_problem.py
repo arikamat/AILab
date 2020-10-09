@@ -121,6 +121,12 @@ class SlidePuzzleState(StateNode):
         """
         return self.tiles
 
+    # Custom function
+    def get_goal_state(self) -> list:
+        goal = []
+        for i in range(self.get_size()):
+            goal.append([i*self.get_size() + x for x in range(self.get_size())])
+        return goal
     
     # Override
     def __str__(self) -> str:

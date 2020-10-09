@@ -21,7 +21,13 @@ def slidepuzzle_hamming(state : SlidePuzzleState)  -> float:
 
 """ Return the sum of Manhattan distances between tiles and goal of the SlidePuzzleState """
 def slidepuzzle_manhattan(state : SlidePuzzleState)  -> float:
-    raise NotImplementedError
+    h = 0
+    n = state.get_size()
+    for row in range(n):
+        for col in range(n):
+            if state.tiles[row][col] != 0 and state.tiles[row][col] != row*n + col:
+                h += abs(row - (state.tiles[row][col] // n)) + abs(col - (state.tiles[row][col] % n))
+    return h
 
 SLIDEPUZZLE_HEURISTICS = {
     "Zero" : zero_heuristic, 

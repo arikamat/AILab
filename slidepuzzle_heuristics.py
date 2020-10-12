@@ -15,7 +15,7 @@ def slidepuzzle_hamming(state : SlidePuzzleState)  -> float:
     for row in range(state.get_size()):
         for col in range(state.get_size()):
             if state.tiles[row][col] != 0:
-                if state.tiles[row][col] != state.get_goal_state()[row][col]:
+                if state.tiles[row][col] != row*state.get_size() + col:
                     h += 1
     return h
 

@@ -124,7 +124,7 @@ class TreeSearchAlgorithm(GoalSearchAgent):
             # extend node
             for action in s.get_all_actions():
                 if gui_callback_fn(s):
-                    break
+                    return None
                 a = s.get_next_state(action=action)
                 if a != s.parent:
                     self.enqueue(a, cutoff)
@@ -187,7 +187,7 @@ class BreadthFirstSearch(GoalSearchAgent):
         
     def enqueue(self, state: StateNode, cutoff: Union[int, float] = INF):
         """ Add the state to the frontier, unless depth exceeds the cutoff """
-        if not state.depth > cutoff: #state.depth>=cutoff
+        if not state.depth > cutoff: #state.depth<=cutoff
             self.frontier.append(state)
         
 
@@ -268,27 +268,27 @@ class GraphSearchAlgorithm(GoalSearchAgent):
         ext_filter : Set[StateNode] = set() # Create an empty extended state filter
 
         #TODO implement! (You may start by copying your TreeSearch's code)
-                # enqueue initial state
+        # enqueue initial state
         self.enqueue(initial_state, cutoff)
         self.total_enqueues += 1
-        ext_filter = []
         while self.frontier:
             # dequeue node
             s = self.dequeue()
-            # check if it is a goal state
-            if s.is_goal_state():
-               return s
             # extend node
             if s not in ext_filter:
+                # check if it is a goal state
+                if s.is_goal_state():
+                    return s
                 for action in s.get_all_actions():
                     if gui_callback_fn(s):
-                        break
+                        return None
                     if s.get_next_state(action) != s.parent:
                         self.enqueue(s.get_next_state(action), cutoff)
                         self.total_enqueues += 1
                 self.total_extends += 1
-                ext_filter.append(s)
+                ext_filter.add(s)
         return None
+
 
 
 

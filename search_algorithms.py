@@ -419,7 +419,37 @@ class AnytimeSearchAlgorithm(InformedSearchAgent):
         *Closest according to the agent's heuristic.
         """
         #TODO implement! (You may start by copying your GraphSearch's code)
-        return None
+        ext_filter : Set[StateNode] = set() # Create an empty extended state filter
+        best_node = None
+        best_heuristic = INF
+        best_cost = INF
+
+
+        # enqueue initial state
+        self.enqueue(initial_state, cutoff)
+        self.total_enqueues += 1
+        while self.frontier:
+            # dequeue node
+            s = self.dequeue()
+            # extend node
+            if s not in ext_filter:
+                # check if it is a goal state
+                if s.is_goal_state():
+                    return s
+                # check if node is closer to goal           check if node is equally close but costs less
+                if self.heuristic(s) < best_heuristic or (s.path_cost < best_cost and self.heuristic(s) == best_heuristic):
+                    best_heuristic = self.heuristic(s)
+                    best_cost = s.path_cost
+                    best_node = s
+                for action in s.get_all_actions():
+                    if gui_callback_fn(s):
+                        return best_node
+                    if s.get_next_state(action) != s.parent:
+                        self.enqueue(s.get_next_state(action), cutoff)
+                        self.total_enqueues += 1
+                self.total_extends += 1
+                ext_filter.add(s)
+        return best_node
 
 
 

@@ -15,7 +15,7 @@ def spotlessroomba_first_heuristic(state : SpotlessRoombaState)  -> float:
 def spotlessroomba_second_heuristic(state : SpotlessRoombaState)  -> float:
     # TODO a nontrivial consistent heuristic
     """
-    Best Path Heuristic (admissible, I think it is consistent but no idea how to prove it)
+    Best Path Heuristic (consistent)
     (seems to be a very good heuristic)
     Gives the roomba the ability to pass through walls and ignore additional cost on carpet
     1. Find which dirty tile is best to start from
@@ -75,6 +75,8 @@ def spotlessroomba_second_heuristic(state : SpotlessRoombaState)  -> float:
 def spotlessroomba_third_heuristic(state : SpotlessRoombaState) -> float:
     """
     Total Manhattan Distance Heuristic (neither admissible nor consistent)
+    (this heuristic is included moreso to show the idea Best Path is based, but it is
+    often more effective than Hamming even if it isn't admissible)
     Gives the roomba the ability to pass through walls and ignore additional cost on carpet
     1. Find closest dirty tile in manhattan distance
     2. Move roomba to closest dirty tile

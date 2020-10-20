@@ -1,4 +1,4 @@
-# Lab 1, Part 2a: Heuristics.
+# Lab 1, Part 2a & 2d: Heuristics.
 # Name(s): Ari Kamat, Norikazu Kawasaki
 
 from __future__ import annotations

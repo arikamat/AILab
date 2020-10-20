@@ -1,3 +1,6 @@
+# Lab 1, Part 2c: Heuristics.
+# Name(s): Ari Kamat, Norikazu Kawasaki
+
 from search_heuristics import *
 from spotlessroomba_problem import *
 

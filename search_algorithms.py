@@ -286,6 +286,11 @@ class GraphSearchAlgorithm(GoalSearchAgent):
                         self.enqueue(s.get_next_state(action), cutoff)
                         self.total_enqueues += 1
                 self.total_extends += 1
+                # temporary block to test admissibility
+                try:
+                    print(self.heuristic(s) + s.path_cost)
+                except AttributeError:
+                    pass
                 ext_filter.add(s)
         return None
 
